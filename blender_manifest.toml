@@ -1,0 +1,12 @@
+schema_version = "1.0.0"
+id = "camera_shakify_rework"
+version = "0.0.1"
+name = "Camera Shakify Rework"
+tagline = "Add, import, and share captured camera shake/wobble from your cameras."
+maintainer = "Tazmin, Nathan Vegdahl, Ian Hubert"
+type = "add-on"
+tags = ["3D View"]
+blender_version_min = "4.2.0"
+license = [
+"SPDX:GPL-2.0-or-later",
+]
