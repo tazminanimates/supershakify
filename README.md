@@ -1,3 +1,7 @@
+# Rework
+
+A modification to the original Camera Shakify by Ian Hubert and Nathan Vegdahl. Allows exporting, importing, and sharing of custom shakes. **This addon includes a copy of their shakify. Turn off any other versions of shakify to avoid conflicts between addons.**
+
 # Camera Shakify
 
 An addon for Blender that lets you easily add [realistic camera shake](https://youtu.be/4lCm_jqoBrI) to your cameras.
@@ -16,7 +20,3 @@ Although we are not specifically looking for contributions right now, if you wou
 
 - By submitting any work for inclusion in this addon, you agree to license it under the same terms as above, and you assert that you have the rights to do so.
 - Larger changes to the addon are likely to be rejected unless by pure coincidence they happen to align with our goals for the project.  So if you are considering a larger change, please either file an issue or otherwise contact us to discuss your idea before starting work on it, so that you don't inadvertantly waste your time.
-
-# Rework
-
-A modification to the original Camera Shakify by Ian Hubert and Nathan Vegdahl. Allows exporting, importing, and sharing of custom shakes.
