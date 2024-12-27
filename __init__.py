@@ -1,34 +1,28 @@
-#====================== BEGIN GPL LICENSE BLOCK ======================
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
 #
-#  This program is free software; you can redistribute it and/or
-#  modify it under the terms of the GNU General Public License
-#  as published by the Free Software Foundation; either version 2
-#  of the License, or (at your option) any later version.
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTIBILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
 #
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software Foundation,
-#  Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-#
-#======================= END GPL LICENSE BLOCK ========================
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 bl_info = {
     "name" : "Camera Shakify Rework",
     "author" : "Tazmin, Nathan Vegdahl, Ian Hubert", 
     "description" : "Add, import, and share captured camera shake/wobble from your cameras.",
     "blender" : (4, 2, 0),
-    "version" : (0, 0, 1),
+    "version" : (0, 0, 2),
     "location" : "Side Panel/Camera Settings",
     "warning" : "VERY EXPERIMENTAL, MAY CRASH BLENDER/CORRUPT FILES, PLEASE REPORT ANY BUG TO https://forms.gle/b5WSwkwYrHddQhSU7",
     "doc_url": "", 
     "tracker_url": "", 
     "category" : "3D View" 
 }
-
 import bpy
 import re
 import math
@@ -61,7 +55,7 @@ UNIT_SCALE_MAX = 1000.0
 
 class CameraShakifyPanel(bpy.types.Panel):
     """Add shake to your Cameras."""
-    bl_label = "Camera Shakify"
+    bl_label = "Camera Shakify Rework"
     bl_idname = "DATA_PT_camera_shakify"
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
@@ -588,6 +582,7 @@ class CameraShakeInstance(bpy.types.PropertyGroup):
 
 
 
+
 def string_to_int(value):
     if value.isdigit():
         return int(value)
@@ -638,9 +633,9 @@ def sna_update_sna_imported_shake_index_126B9(self, context):
     bpy.context.scene.sna_imported_shake_index = -32
 
 
-class SNA_PT_SHAKIFY_REWORK_B9B49(bpy.types.Panel):
+class SNA_PT_SHAKIFY_REWORK_51BA1(bpy.types.Panel):
     bl_label = 'Shakify Rework'
-    bl_idname = 'SNA_PT_SHAKIFY_REWORK_B9B49'
+    bl_idname = 'SNA_PT_SHAKIFY_REWORK_51BA1'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_context = ''
@@ -673,14 +668,14 @@ class SNA_PT_SHAKIFY_REWORK_B9B49(bpy.types.Panel):
             box_AD5CA.label(text='Selected Object is Not Camera', icon_value=string_to_icon('PMARKER_ACT'))
 
 
-class SNA_PT_IMPORTED_SHAKES_8318E(bpy.types.Panel):
+class SNA_PT_IMPORTED_SHAKES_F02AD(bpy.types.Panel):
     bl_label = 'Imported Shakes'
-    bl_idname = 'SNA_PT_IMPORTED_SHAKES_8318E'
+    bl_idname = 'SNA_PT_IMPORTED_SHAKES_F02AD'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_context = ''
     bl_order = 1
-    bl_parent_id = 'SNA_PT_SHAKIFY_REWORK_B9B49'
+    bl_parent_id = 'SNA_PT_SHAKIFY_REWORK_51BA1'
     bl_ui_units_x=0
 
     @classmethod
@@ -704,7 +699,7 @@ class SNA_PT_IMPORTED_SHAKES_8318E(bpy.types.Panel):
         row_B8F37.alignment = 'Expand'.upper()
         row_B8F37.operator_context = "INVOKE_DEFAULT" if True else "EXEC_DEFAULT"
         coll_id = display_collection_id('B4700', locals())
-        row_B8F37.template_list('SNA_UL_display_collection_list_B4700', coll_id, bpy.context.scene, 'sna_imported_shakes', bpy.context.scene, 'sna_imported_shake_index', rows=0)
+        row_B8F37.template_list('SNA_UL_display_collection_list_B4700', coll_id, bpy.context.scene, 'sna_all_shakes', bpy.context.scene, 'sna_imported_shake_index', rows=0)
         col_A9BE3 = layout.column(heading='', align=False)
         col_A9BE3.alert = False
         col_A9BE3.enabled = True
@@ -715,13 +710,13 @@ class SNA_PT_IMPORTED_SHAKES_8318E(bpy.types.Panel):
         col_A9BE3.scale_y = 2.5
         col_A9BE3.alignment = 'Expand'.upper()
         col_A9BE3.operator_context = "INVOKE_DEFAULT" if True else "EXEC_DEFAULT"
-        op = col_A9BE3.operator('sna.import_shake001_743f2', text='Import Shake', icon_value=string_to_icon('IMPORT'), emboss=True, depress=False)
+        op = col_A9BE3.operator('sna.import_shakes_743f2', text='Import Shake', icon_value=string_to_icon('IMPORT'), emboss=True, depress=False)
 
 
-class SNA_OT_Export_Shake001_54408(bpy.types.Operator, ExportHelper):
-    bl_idname = "sna.export_shake001_54408"
-    bl_label = "Export Shake.001"
-    bl_description = ""
+class SNA_OT_Export_Shake_54408(bpy.types.Operator, ExportHelper):
+    bl_idname = "sna.export_shake_54408"
+    bl_label = "Export Shake."
+    bl_description = "Exports Custom Shake out of Super Shakify"
     bl_options = {"REGISTER", "UNDO"}
     filter_glob: bpy.props.StringProperty( default='*.py', options={'HIDDEN'} )
     filename_ext = '.py'
@@ -733,67 +728,51 @@ class SNA_OT_Export_Shake001_54408(bpy.types.Operator, ExportHelper):
         return not False
 
     def execute(self, context):
-        custom_namer = bpy.context.scene.sna_shake_name
+        shake_namer = bpy.context.scene.sna_shake_name
         frame_starts = bpy.context.scene.sna_frame_begin
         frame_ends = bpy.context.scene.sna_frame_end
         pathe = self.filepath
         success = None
-        import os
-        # Define variables for easy access
+        from bpy.types import Action
 
-        def export_camera_shake_data(filepath, custom_name, frame_start, frame_end):
-            selected_obj = bpy.context.active_object
-            if selected_obj is None or selected_obj.type != 'CAMERA':
-                print("Error: Selected object is not a camera.")
-                return
-            animation_data = selected_obj.animation_data
-            if animation_data is None or animation_data.action is None:
-                print("Error: Selected camera does not have animation data.")
-                return
-            # Use custom name if provided, otherwise fallback to object name
-            if custom_name.strip() == "":
-                custom_name = selected_obj.name
-            formatted_name = custom_name.translate(str.maketrans("!@#$%^&*()[]{};:,./<>?\|`~-=_+", "_" * 30)).upper().replace(" ", "_")
-            new_shake_data = {
-                formatted_name: (custom_name, 24.0, {})
-            }
-            for fcurve in animation_data.action.fcurves:
-                data_path = fcurve.data_path
-                if "location" in data_path or "rotation" in data_path:
-                    array_index = fcurve.array_index
-                    keyframes = [(int(kf.co[0]), kf.co[1]) for kf in fcurve.keyframe_points
-                                 if frame_start <= kf.co[0] <= frame_end]
-                    new_shake_data[formatted_name][2][(data_path, array_index)] = keyframes
-                else: 
-                    print(f'Invalid Keyframe Type: {data_path}')
-            # Load existing SHAKE_LIST if file exists, or initialize it if not
-            if os.path.exists(filepath):
-                with open(filepath, 'r') as file:
-                    exec(file.read(), globals())
-            else:
-                global SHAKE_LIST
-                SHAKE_LIST = {}
-            SHAKE_LIST.update(new_shake_data)
-            # Write the updated SHAKE_LIST back to the file in a formatted way
-            with open(filepath, 'w') as file:
-                file.write("SHAKE_LIST = {\n")
-                for key, (name, fps_ratio, data) in SHAKE_LIST.items():
-                    file.write(f'    "{key}": ("{name}", {fps_ratio}, {{\n')
-                    for (data_path, array_index), keyframes in data.items():
-                        file.write(f'        ({repr(data_path)}, {array_index}): {keyframes},\n')
-                    file.write("    }),\n")
-                file.write("}\n")
-            print(f"Shake data saved to {filepath}")
-            success = True
-        export_camera_shake_data(pathe, custom_namer, frame_starts, frame_ends)
+        def action_to_python_data_text(frame_start, frame_end, shake_name, export_path):
+            obj = bpy.context.object
+            if not obj or not obj.animation_data or not obj.animation_data.action:
+                raise ValueError("No active object with an action found.")
+            act = obj.animation_data.action
+            # Convert the shake_name to the desired format (uppercase with underscores)
+            shake_id = shake_name.upper().replace(" ", "_")
+            # Collect channel data
+            channels = {}
+            for curve in act.fcurves:
+                baked_keys = []
+                for frame in range(frame_start, frame_end + 1):
+                    baked_keys.append((frame, curve.evaluate(frame)))
+                channels[(curve.data_path, curve.array_index)] = baked_keys
+            # Generate Python data text
+            text = "SHAKE_LIST = {\n"
+            text += f"    '{shake_id}': ('{shake_name}', 24.0, {{\n"
+            for (data_path, array_index), points in channels.items():
+                text += f"        ('{data_path}', {array_index}): ["
+                text += ", ".join(f"({frame}, {value:.6f})" for frame, value in points)
+                text += "],\n"
+            text += "    })\n"
+            text += "}\n"
+            # Write to file
+            with open(export_path, "w") as f:
+                f.write(text)
+                success = True
+            print(f"Shake data exported to {export_path}")
+        # Execute the function
+        action_to_python_data_text(frame_starts, frame_ends, shake_namer, pathe)
         print(bpy.context.scene.sna_shake_name + ' was exported :0')
         return {"FINISHED"}
 
 
-class SNA_OT_Import_Shake001_743F2(bpy.types.Operator, ImportHelper):
-    bl_idname = "sna.import_shake001_743f2"
-    bl_label = "Import Shake.001"
-    bl_description = ""
+class SNA_OT_Import_Shakes_743F2(bpy.types.Operator, ImportHelper):
+    bl_idname = "sna.import_shakes_743f2"
+    bl_label = "Import Shake(s)"
+    bl_description = "Imports a shake into Super Shakify"
     bl_options = {"REGISTER", "UNDO"}
     filter_glob: bpy.props.StringProperty( default='*.py', options={'HIDDEN'} )
 
@@ -855,9 +834,9 @@ class SNA_OT_Import_Shake001_743F2(bpy.types.Operator, ImportHelper):
         return {"FINISHED"}
 
 
-class SNA_PT_CAMERA_SHAKIFY_2_A77EE(bpy.types.Panel):
+class SNA_PT_CAMERA_SHAKIFY_2_9D90B(bpy.types.Panel):
     bl_label = 'Camera Shakify 2'
-    bl_idname = 'SNA_PT_CAMERA_SHAKIFY_2_A77EE'
+    bl_idname = 'SNA_PT_CAMERA_SHAKIFY_2_9D90B'
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
     bl_context = 'data'
@@ -905,7 +884,7 @@ class SNA_OT_Uninstall_Shake_88F90(bpy.types.Operator):
         return not False
 
     def execute(self, context):
-        item_to_remove = bpy.context.scene.sna_imported_shakes[self.sna_item_index].shake_id
+        item_to_remove = bpy.context.scene.sna_all_shakes[self.sna_item_index].shake_id
         # Importing necessary module
         # Define the variable with the value to delete
         current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -922,12 +901,12 @@ class SNA_OT_Uninstall_Shake_88F90(bpy.types.Operator):
         # Write the updated data back to the file
         with open(file_path, "w") as file:
             file.write(f"SHAKE_LIST = {parsed_data}")
-        if (self.sna_item_index == int(len(bpy.context.scene.sna_imported_shakes) - 1.0)):
-            if len(bpy.context.scene.sna_imported_shakes) > self.sna_item_index:
-                bpy.context.scene.sna_imported_shakes.remove(self.sna_item_index)
+        if (self.sna_item_index == int(len(bpy.context.scene.sna_all_shakes) - 1.0)):
+            if len(bpy.context.scene.sna_all_shakes) > self.sna_item_index:
+                bpy.context.scene.sna_all_shakes.remove(self.sna_item_index)
         else:
-            if len(bpy.context.scene.sna_imported_shakes) > self.sna_item_index:
-                bpy.context.scene.sna_imported_shakes.remove(self.sna_item_index)
+            if len(bpy.context.scene.sna_all_shakes) > self.sna_item_index:
+                bpy.context.scene.sna_all_shakes.remove(self.sna_item_index)
         return {"FINISHED"}
 
     def invoke(self, context, event):
@@ -955,7 +934,7 @@ class SNA_OT_List_Shakes_1252F(bpy.types.Operator):
         return not False
 
     def execute(self, context):
-        bpy.context.scene.sna_imported_shakes.clear()
+        bpy.context.scene.sna_all_shakes.clear()
         shake_names = None
         shake_ids = None
         import os
@@ -990,7 +969,7 @@ class SNA_OT_List_Shakes_1252F(bpy.types.Operator):
             print("Shake Names:", shake_names)
             print("Shake IDs:", shake_ids)
         for i_CF8A3 in range(len(shake_names)):
-            item_6F9F2 = bpy.context.scene.sna_imported_shakes.add()
+            item_6F9F2 = bpy.context.scene.sna_all_shakes.add()
             item_6F9F2.shake_id = shake_ids[i_CF8A3]
             item_6F9F2.shake_name = shake_names[i_CF8A3]
         return {"FINISHED"}
@@ -1041,15 +1020,15 @@ class SNA_OT_Open_Report_Cf637(bpy.types.Operator):
         return self.execute(context)
 
 
-class SNA_PT_EXPORT_SHAKE_8EC7A(bpy.types.Panel):
+class SNA_PT_EXPORT_SHAKE_AD9A3(bpy.types.Panel):
     bl_label = 'Export Shake'
-    bl_idname = 'SNA_PT_EXPORT_SHAKE_8EC7A'
+    bl_idname = 'SNA_PT_EXPORT_SHAKE_AD9A3'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_context = ''
     bl_order = 3
     bl_options = {'DEFAULT_CLOSED'}
-    bl_parent_id = 'SNA_PT_SHAKIFY_REWORK_B9B49'
+    bl_parent_id = 'SNA_PT_SHAKIFY_REWORK_51BA1'
     bl_ui_units_x=0
 
     @classmethod
@@ -1119,7 +1098,7 @@ class SNA_PT_EXPORT_SHAKE_8EC7A(bpy.types.Panel):
         col_DEB08.scale_y = 2.5
         col_DEB08.alignment = 'Expand'.upper()
         col_DEB08.operator_context = "INVOKE_DEFAULT" if True else "EXEC_DEFAULT"
-        op = col_DEB08.operator('sna.export_shake001_54408', text='Export', icon_value=string_to_icon('EXPORT'), emboss=True, depress=False)
+        op = col_DEB08.operator('sna.export_shake_54408', text='Export Shake', icon_value=string_to_icon('EXPORT'), emboss=True, depress=False)
 
 
 class SNA_GROUP_sna_property_groups(bpy.types.PropertyGroup):
@@ -1131,7 +1110,6 @@ class SNA_GROUP_sna_property_groups(bpy.types.PropertyGroup):
 
 def sna_shakes_enum_items(self, context):
     return [("No Items", "No Items", "No generate enum items node found to create items!", "ERROR", 0)]
-
 
 
 #========================================================
@@ -1151,20 +1129,20 @@ def register():
     bpy.types.Scene.sna_selected = bpy.props.IntProperty(name='Selected', description='', default=0, subtype='NONE')
     bpy.types.Scene.sna_shakes = bpy.props.EnumProperty(name='Shakes', description='', items=sna_shakes_enum_items)
     bpy.types.Scene.sna_imported_shake_index = bpy.props.IntProperty(name='Imported Shake index', description='', default=0, subtype='NONE', update=sna_update_sna_imported_shake_index_126B9)
-    bpy.types.Scene.sna_imported_shakes = bpy.props.CollectionProperty(name='imported shakes', description='', type=SNA_GROUP_sna_property_groups)
+    bpy.types.Scene.sna_all_shakes = bpy.props.CollectionProperty(name='All Shakes', description='', type=SNA_GROUP_sna_property_groups)
     bpy.types.Scene.sna_shake_author = bpy.props.StringProperty(name='Shake Author', description='', default='', subtype='NONE', maxlen=0)
-    bpy.utils.register_class(SNA_PT_SHAKIFY_REWORK_B9B49)
-    bpy.utils.register_class(SNA_PT_IMPORTED_SHAKES_8318E)
+    bpy.utils.register_class(SNA_PT_SHAKIFY_REWORK_51BA1)
+    bpy.utils.register_class(SNA_PT_IMPORTED_SHAKES_F02AD)
     bpy.utils.register_class(SNA_UL_display_collection_list_B4700)
-    bpy.utils.register_class(SNA_OT_Export_Shake001_54408)
-    bpy.utils.register_class(SNA_OT_Import_Shake001_743F2)
-    bpy.utils.register_class(SNA_PT_CAMERA_SHAKIFY_2_A77EE)
+    bpy.utils.register_class(SNA_OT_Export_Shake_54408)
+    bpy.utils.register_class(SNA_OT_Import_Shakes_743F2)
+    bpy.utils.register_class(SNA_PT_CAMERA_SHAKIFY_2_9D90B)
     bpy.utils.register_class(SNA_OT_Uninstall_Shake_88F90)
     bpy.app.handlers.load_pre.append(load_pre_handler_59087)
     bpy.utils.register_class(SNA_OT_List_Shakes_1252F)
     bpy.utils.register_class(SNA_AddonPreferences_80B3B)
     bpy.utils.register_class(SNA_OT_Open_Report_Cf637)
-    bpy.utils.register_class(SNA_PT_EXPORT_SHAKE_8EC7A)
+    bpy.utils.register_class(SNA_PT_EXPORT_SHAKE_AD9A3)
     bpy.utils.register_class(CameraShakifyPanel)
     bpy.utils.register_class(OBJECT_UL_camera_shake_items)
     bpy.utils.register_class(CameraShakeInstance)
@@ -1195,7 +1173,7 @@ def unregister():
         km.keymap_items.remove(kmi)
     addon_keymaps.clear()
     del bpy.types.Scene.sna_shake_author
-    del bpy.types.Scene.sna_imported_shakes
+    del bpy.types.Scene.sna_all_shakes
     del bpy.types.Scene.sna_imported_shake_index
     del bpy.types.Scene.sna_shakes
     del bpy.types.Scene.sna_selected
@@ -1207,18 +1185,18 @@ def unregister():
     del bpy.types.Scene.sna_shake_name
     del bpy.types.Scene.sna_camera
     bpy.utils.unregister_class(SNA_GROUP_sna_property_groups)
-    bpy.utils.unregister_class(SNA_PT_SHAKIFY_REWORK_B9B49)
-    bpy.utils.unregister_class(SNA_PT_IMPORTED_SHAKES_8318E)
+    bpy.utils.unregister_class(SNA_PT_SHAKIFY_REWORK_51BA1)
+    bpy.utils.unregister_class(SNA_PT_IMPORTED_SHAKES_F02AD)
     bpy.utils.unregister_class(SNA_UL_display_collection_list_B4700)
-    bpy.utils.unregister_class(SNA_OT_Export_Shake001_54408)
-    bpy.utils.unregister_class(SNA_OT_Import_Shake001_743F2)
-    bpy.utils.unregister_class(SNA_PT_CAMERA_SHAKIFY_2_A77EE)
+    bpy.utils.unregister_class(SNA_OT_Export_Shake_54408)
+    bpy.utils.unregister_class(SNA_OT_Import_Shakes_743F2)
+    bpy.utils.unregister_class(SNA_PT_CAMERA_SHAKIFY_2_9D90B)
     bpy.utils.unregister_class(SNA_OT_Uninstall_Shake_88F90)
     bpy.app.handlers.load_pre.remove(load_pre_handler_59087)
     bpy.utils.unregister_class(SNA_OT_List_Shakes_1252F)
     bpy.utils.unregister_class(SNA_AddonPreferences_80B3B)
     bpy.utils.unregister_class(SNA_OT_Open_Report_Cf637)
-    bpy.utils.unregister_class(SNA_PT_EXPORT_SHAKE_8EC7A)
+    bpy.utils.unregister_class(SNA_PT_EXPORT_SHAKE_AD9A3)
     bpy.utils.unregister_class(CameraShakifyPanel)
     bpy.utils.unregister_class(OBJECT_UL_camera_shake_items)
     bpy.utils.unregister_class(CameraShakeInstance)
