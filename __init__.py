@@ -38,7 +38,7 @@ from bpy.app.handlers import persistent
 import importlib.util
 import webbrowser
 
-BASE_NAME = "CameraShakify.v2"
+BASE_NAME = "CameraShakifyRework.v2"
 COLLECTION_NAME = BASE_NAME
 FRAME_EMPTY_NAME = BASE_NAME + "_frame_empty"
 
